@@ -1,7 +1,9 @@
 package com.zlx.compose
 
+import MyApp
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
@@ -18,8 +20,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,8 +34,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.zlx.compose.demo.ComposeSample
+import com.zlx.compose.demo.MySootheAppLandscape
 import com.zlx.compose.ui.theme.ComposeDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -68,8 +74,13 @@ fun TestColumn(name: String, modifier: Modifier = Modifier) {
             text = "Hello $name!",
             modifier = modifier
         )
-        Text(
-            text = "this is another line : $name"
+        ClickableText(
+            buildAnnotatedString {
+                append("this is another line : $name")
+            },
+            onClick = { offset ->
+                Log.d("offset", "offset:$offset")
+            }
         )
     }
 }
@@ -107,7 +118,8 @@ fun TestImageAndText(message: Message) {
         var isExpand by remember { mutableStateOf(false) }
 
         val surfaceColor by animateColorAsState(
-            targetValue = if (isExpand) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+            targetValue = if (isExpand) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+            label = "1233333"
         )
 
         Column(modifier = Modifier.clickable { isExpand = !isExpand }) {
@@ -121,7 +133,9 @@ fun TestImageAndText(message: Message) {
                 shape = MaterialTheme.shapes.medium,
 //                tonalElevation = 1.dp,
                 color = surfaceColor,
-                modifier = Modifier.animateContentSize().padding(1.dp)
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(1.dp)
             ) {
                 Text(
                     text = message.body,
@@ -136,18 +150,32 @@ fun TestImageAndText(message: Message) {
 
 @Composable
 fun TestList(messages: List<Message>) {
-    LazyColumn {
+    // 使得列表滚动
+    val state = rememberLazyListState()
+
+    LazyColumn(state = state) {
         items(messages) { msg -> TestImageAndText(message = msg) }
+//        items(messages) {
+//            TestRow(name = "", Modifier.clickable(onClickLabel = "123") {
+//            Log.d("column","clicked!")
+//        }) }
     }
 }
 
-@Preview(showBackground = true, name = "night mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+
+@Preview(
+    showBackground = true, name = "night mode", uiMode = Configuration.UI_MODE_NIGHT_YES,
+    locale = "zh-rCN"
+)
 @Composable
 fun GreetingPreview() {
+
     ComposeDemoTheme {
-//        TestRow("==")
-//        TestImageAndText(Message("Android", "jetpack Compose"))
-        TestList(messages = SampleData.conversationSample)
+//        TestList(messages = SampleData.conversationSample)
+//        ComposeSample()
+//        MySootheAppLandscape()
+        MyApp()
+
     }
 }
 
@@ -225,5 +253,27 @@ object SampleData {
             "Colleague",
             "Have you tried writing build.gradle with KTS?"
         ),
-    )
+        Message(
+            "Colleague",
+            "This is another line?"
+        ),
+        Message(
+            "Colleague",
+            "How do you know your name?"
+        ),
+        Message(
+            "Colleague",
+            "Do you like playing games?"
+        ),
+        Message(
+            "Colleague",
+            "You looks funny?"
+        ),
+        Message(
+            "Colleague",
+            "This is the world?"
+        ),
+
+
+        )
 }
