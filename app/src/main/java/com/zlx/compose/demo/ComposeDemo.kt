@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -54,6 +55,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LeadingIconTab
@@ -102,6 +104,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.window.SecureFlagPolicy
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.zlx.compose.R
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -110,40 +115,40 @@ import kotlin.random.Random
 /**
  * 文本
  */
-@Composable
-fun TextSample() {
-    Column {
-        Text(text = "This is a text")
-        Text(
-            // 从资源文件读取
-            text = stringResource(id = R.string.app_name),
-            color = Color.Blue,
-            fontSize = 17.sp,
-            fontStyle = FontStyle.Italic
-//            fontSize = TextUnit(
-//                16f,
-//                TextUnitType.Sp
-//            )
-        )
-        // 一行文本 多种样式
-        Text(
-            buildAnnotatedString {
-                withStyle(style = SpanStyle(Color.Red)) {
-                    append("锄禾日当午，")
-                }
-                withStyle(style = SpanStyle(Color.Green)) {
-                    append("汗滴禾下土。")
-                }
-                withStyle(style = SpanStyle(Color.Blue)) {
-                    append("谁知盘中餐，")
-                }
-                withStyle(style = SpanStyle(Color.Yellow)) {
-                    append("粒粒皆辛苦")
-                }
-            }
-        )
-    }
-}
+//@Composable
+//fun TextSample() {
+//    Column {
+//        Text(text = "This is a text")
+//        Text(
+//            // 从资源文件读取
+//            text = stringResource(id = R.string.app_name),
+//            color = Color.Blue,
+//            fontSize = 17.sp,
+//            fontStyle = FontStyle.Italic
+////            fontSize = TextUnit(
+////                16f,
+////                TextUnitType.Sp
+////            )
+//        )
+//        // 一行文本 多种样式
+//        Text(
+//            buildAnnotatedString {
+//                withStyle(style = SpanStyle(Color.Red)) {
+//                    append("锄禾日当午，")
+//                }
+//                withStyle(style = SpanStyle(Color.Green)) {
+//                    append("汗滴禾下土。")
+//                }
+//                withStyle(style = SpanStyle(Color.Blue)) {
+//                    append("谁知盘中餐，")
+//                }
+//                withStyle(style = SpanStyle(Color.Yellow)) {
+//                    append("粒粒皆辛苦")
+//                }
+//            }
+//        )
+//    }
+//}
 
 /**
  * 按钮
@@ -277,8 +282,8 @@ fun TextFieldSample() {
             onValueChange = { name = it },
             modifier = Modifier
                 .background(
-                    Color.Green
-                ),
+                    Color.Cyan
+                ).fillMaxWidth().height(50.dp),
             maxLines = 5
         )
         OutlinedTextField(
@@ -499,7 +504,7 @@ fun LazyRowSample() {
         LazyRow(state = state2) {
             items(items.size) {
                 ListItem(
-                    headlineText = {
+                    headlineContent = {
                         Text(
                             text = "123",
                             Modifier
@@ -508,7 +513,7 @@ fun LazyRowSample() {
                         )
                     },
                     // 主题内容上方显示的内容
-                    overlineText = { Text(text = "显示在主题内容上方") },
+                    overlineContent = { Text(text = "显示在主题内容上方") },
                     // 主题内容
                     leadingContent = { Text(text = items[it], Modifier.background(Color.Green)) },
                     // 尾部追加内容
@@ -772,43 +777,43 @@ fun DialogSample() {
 
 }
 
-@Composable
-fun AlertDialogSample() {
-    var showDialog by remember {
-        mutableStateOf(false)
-    }
-    Column {
-        Button(onClick = { showDialog = true }) {
-            Text(text = "AlertDialog")
-        }
-        if (showDialog) {
-            AlertDialog(
-                // 点击弹窗外部分执行的操作 如不想有任何操作 参数内容设置为空
-//                onDismissRequest = { },
-                onDismissRequest = { showDialog = false },
-                confirmButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text(text = "确认")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text(text = "取消")
-                    }
-                },
-                title = {
-                    Text(text = "AlertDialogSample")
-                },
-                text = {
-                    Text(
-                        text = "This is AlertDialogSample \n" +
-                                "Nothing to do here"
-                    )
-                })
-        }
-    }
-}
-
+//@Composable
+//fun AlertDialogSample() {
+//    var showDialog by remember {
+//        mutableStateOf(false)
+//    }
+//    Column {
+//        Button(onClick = { showDialog = true }) {
+//            Text(text = "AlertDialog")
+//        }
+//        if (showDialog) {
+//            AlertDialog(
+//                // 点击弹窗外部分执行的操作 如不想有任何操作 参数内容设置为空
+////                onDismissRequest = { },
+//                onDismissRequest = { showDialog = false },
+//                confirmButton = {
+//                    TextButton(onClick = { showDialog = false }) {
+//                        Text(text = "确认")
+//                    }
+//                },
+//                dismissButton = {
+//                    TextButton(onClick = { showDialog = false }) {
+//                        Text(text = "取消")
+//                    }
+//                },
+//                title = {
+//                    Text(text = "AlertDialogSample")
+//                },
+//                text = {
+//                    Text(
+//                        text = "This is AlertDialogSample \n" +
+//                                "Nothing to do here"
+//                    )
+//                })
+//        }
+//    }
+//}
+//
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -992,7 +997,107 @@ fun AppContent(
 
 @Composable
 fun DividerSample() {
-    Divider(modifier = Modifier.padding(0.dp, 10.dp), thickness = 5.dp, color = Color.Black)
+    HorizontalDivider(
+        modifier = Modifier.padding(0.dp, 10.dp),
+        thickness = 5.dp,
+        color = Color.Black
+    )
+}
+
+@Composable
+fun NavigationSample() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "Home") {
+        composable(route = "Home") {
+            NavigationHomeSample(){
+                navController.navigate("Second")
+            }
+        }
+        composable(route = "Second") {
+            NavigationSecondPageSample(){
+                navController.navigate("Third")
+            }
+        }
+        composable(route = "Third") {
+            NavigationThirdPageSample() {
+                navController.popBackStack("Home", inclusive = false)
+            }
+        }
+    }
+}
+
+@Composable
+fun NavigationHomeSample(goSecondPage:() -> Unit ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Red),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Home Page",
+            color = Color.White,
+            modifier = Modifier
+                .width(50.dp)
+                .height(20.dp)
+        )
+        Button(onClick = {
+            goSecondPage()
+//            navHostController.popBackStack("Home",inclusive = false)
+//            navHostController.popBackStack()
+        }) {
+            Text(text = "Go Second Page", color = Color.LightGray)
+        }
+    }
+}
+
+@Composable
+fun NavigationSecondPageSample(goThirdPage:() -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Green),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Second Page",
+            color = Color.Blue,
+            modifier = Modifier
+                .width(50.dp)
+                .height(20.dp)
+        )
+        Button(onClick = {
+            goThirdPage()
+        }) {
+            Text(text = "Go to Home Page", color = Color.Yellow)
+        }
+    }
+}
+
+@Composable
+fun NavigationThirdPageSample(goHomePage:() -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Cyan),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Third Page",
+            color = Color.Blue,
+            modifier = Modifier
+                .width(50.dp)
+                .height(20.dp)
+        )
+        Button(onClick = {
+            goHomePage()
+        }) {
+            Text(text = "Go to Home Page", color = Color.Yellow)
+        }
+    }
 }
 
 @Composable
@@ -1042,6 +1147,7 @@ fun ComposeSample() {
 
 //    LazyHorizontalGridSample()
 
-    ScaffoldSample()
+//    ScaffoldSample()
 
+    NavigationSample()
 }
